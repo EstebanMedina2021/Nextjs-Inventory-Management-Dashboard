@@ -4,11 +4,11 @@
 
 *,
 *::before,
-*::after{
+*::after {
   box-sizing: border-box;
 }
 
-html, 
+html,
 body,
 #root,
 .app {
@@ -17,4 +17,16 @@ body,
   @apply text-sm;
   @apply bg-gray-500;
   @apply text-gray-900;
+}
+
+@media (min-width: 768px) {
+  .custom-grid-rows {
+    grid-template-rows: repeat(8, 20vh);
+  }
+}
+
+@media (min-width: 1280px) {
+  .custom-grid-rows {
+    grid-template-rows: repeat(8, 7.5vh);
+  }
 }

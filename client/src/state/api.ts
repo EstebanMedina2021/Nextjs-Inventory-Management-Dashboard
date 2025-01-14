@@ -22,14 +22,18 @@ export const api = createApi({
       providesTags: ["Products"],
     }),
     createProduct: build.mutation<Product, NewProduct>({
-      query:(newProduct) => ({
+      query: (newProduct) => ({
         url: "/products",
         method: "POST",
-        body: newProduct
+        body: newProduct,
       }),
-      invalidatesTags: ["Products"]
+      invalidatesTags: ["Products"],
     }),
   }),
 });
 
-export const { useGetDashboardMetricsQuery, useGetProductsQuery, useCreateProductMutation } = api;
+export const {
+  useGetDashboardMetricsQuery,
+  useGetProductsQuery,
+  useCreateProductMutation,
+} = api;

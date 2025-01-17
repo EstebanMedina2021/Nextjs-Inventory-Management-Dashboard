@@ -1,12 +1,13 @@
 "use client";
 
 import { useGetProductsQuery } from "@/state/api";
-import { SearchIcon } from "lucide-react";
+import { PlusCircleIcon, PlusIcon, SearchIcon } from "lucide-react";
 import React, { useState } from "react";
+import Header from "../(components)/Header";
 
 function products() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     data: products,
@@ -40,7 +41,21 @@ function products() {
           />
         </div>
       </div>
+      {/* HEADER BAR */}
+      <div className="flex justify-between items-center mb-6">
+        <Header name="Products" />
+        <button
+          className="flex items-center bg-blue-500 hover:bg-blue-700 text-gray-200 font-bold py-2 px-4 rounded"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <PlusCircleIcon className="w-5 h-5 !text-gray-200" /> Create Product
+        </button>
+      </div>
+      {/* BODY PRODUCTS LIST */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg-grid-cols-3 gap-10 justify-between"></div>
     </div>
+
+    
   );
 }
 

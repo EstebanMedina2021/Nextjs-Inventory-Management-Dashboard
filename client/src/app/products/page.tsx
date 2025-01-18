@@ -1,11 +1,12 @@
 "use client";
 
-import { useGetProductsQuery } from "@/state/api";
+import { useCreateProductMutation, useGetProductsQuery } from "@/state/api";
 import { PlusCircleIcon, PlusIcon, SearchIcon } from "lucide-react";
 import React, { useState } from "react";
 import Header from "../(components)/Header";
 import Rating from "../(components)/Rating";
-
+import CreateProductModel from "./CreateProductModel";
+import { ProductFormData } from "@/utils/interfaces/interfaces";
 
 function products() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,6 +17,11 @@ function products() {
     isLoading,
     isError,
   } = useGetProductsQuery(searchTerm);
+
+  const [createProduct] = useCreateProductMutation();
+  const handleCreateProduct = async (productData: ProductFormData) => {
+    await createProduct(productData);
+  }
 
   if (isLoading) {
     return <div className="py-4">Loading ...</div>;
@@ -64,25 +70,30 @@ function products() {
               className="border shadow rounded-md p-4 max-w-full w-full mx-auto"
             >
               <div className="flex flex-col items-center">
-              img
-              <h3 className="text-lg text-gray-900 font-semibold">
-                {product.name}
-              </h3>
-              <p className="text-gray-800">${product.price.toFixed(2)}</p>
-              <div className="text-sm text-gray-600 mt-1">
-                Stock: {product.stockQuantity}
-              </div>
-              {product.rating && (
-                <div className="flex items-center mt-2">
-                  <Rating rating={product.rating}/>
+                img
+                <h3 className="text-lg text-gray-900 font-semibold">
+                  {product.name}
+                </h3>
+                <p className="text-gray-800">${product.price.toFixed(2)}</p>
+                <div className="text-sm text-gray-600 mt-1">
+                  Stock: {product.stockQuantity}
                 </div>
-              )}
+                {product.rating && (
+                  <div className="flex items-center mt-2">
+                    <Rating rating={product.rating} />
+                  </div>
+                )}
               </div>
             </div>
           ))
         )}
       </div>
-      
+      {/* MODAL */}
+      <CreateProductModel
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreate={handleCreateProduct}
+      />
     </div>
   );
 }

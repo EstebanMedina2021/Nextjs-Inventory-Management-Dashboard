@@ -53,3 +53,10 @@ export interface User {
   name: string;
   email: string;
 }
+
+export type ProductFormData = {
+  name: string;
+  price: number;
+  stockQuantity: number;
+  rating: number;
+};

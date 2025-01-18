@@ -87,7 +87,7 @@ const CreateProductModel = ({
             className={inputCssStyles}
             required
           />
-          {/* RATING */}
+          
           <label htmlFor="rating" className={labelCssStyles}>
             Rating
           </label>

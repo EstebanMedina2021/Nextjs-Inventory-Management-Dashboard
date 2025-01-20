@@ -1,11 +1,11 @@
 "use client";
-import { useGetProductsQuery } from "@/state/api";
+import { useGetUsersQuery } from "@/state/api";
 import React from "react";
 import Header from "../(components)/Header";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
-const Inventory = () => {
-  const { data: products, isError, isLoading } = useGetProductsQuery();
+const Users = () => {
+  const { data: users, isError, isLoading } = useGetUsersQuery();
   const columns: GridColDef[] = [
     { field: "productId", headerName: "ID", width: 90 },
     { field: "name", headerName: "Product Name", width: 200 },
@@ -33,21 +33,21 @@ const Inventory = () => {
   if (isLoading) {
     return <div className="py-4">Loading...</div>;
   }
-  if (isError || !products) {
+  if (isError || !users) {
     return (
       <div className="text-center text-red-500 py-4">
-        Failed to fetch products
+        Failed to fetch users
       </div>
     );
   }
 
   return (
     <div className="flex flex-col">
-      <Header name="Inventory" />
+      <Header name="Users" />
       <DataGrid
-        rows={products}
+        rows={users}
         columns={columns}
-        getRowId={(row) => row.productId}
+        getRowId={(row) => row.userId}
         checkboxSelection
         className="bg-white shadow rounded-lg border border-gray-200 mt-5 !text-gray-700"
       />
@@ -55,4 +55,4 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default Users;

@@ -7,28 +7,10 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 const Users = () => {
   const { data: users, isError, isLoading } = useGetUsersQuery();
   const columns: GridColDef[] = [
-    { field: "productId", headerName: "ID", width: 90 },
-    { field: "name", headerName: "Product Name", width: 200 },
-    {
-      field: "price",
-      headerName: "Price",
-      width: 110,
-      type: "number",
-      valueGetter: (vale, row) => `${row.price}`,
-    },
-    {
-      field: "rating",
-      headerName: "Rating",
-      width: 110,
-      type: "number",
-      valueGetter: (vale, row) => (row.rating ? row.rating : "N/A"),
-    },
-    {
-      field: "stockQuantity",
-      headerName: "Stock Quantity",
-      width: 150,
-      type: "number",
-    },
+    { field: "USERId", headerName: "ID", width: 90 },
+    { field: "name", headerName: "Name", width: 200 },
+    { field: "email", headerName: "Email", width: 200 },
+    
   ];
   if (isLoading) {
     return <div className="py-4">Loading...</div>;

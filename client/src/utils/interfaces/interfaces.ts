@@ -60,3 +60,9 @@ export type ProductFormData = {
   stockQuantity: number;
   rating: number;
 };
+
+export type UserSetting ={
+  label: string;
+  value: string | boolean;
+  type: "text" | "toggle"
+}

@@ -47,5 +47,5 @@ export const {
   useGetProductsQuery,
   useCreateProductMutation,
   useGetUsersQuery,
-  useLazyGetExpensesByCategoryQuery
+  useGetExpensesByCategoryQuery
 } = api;

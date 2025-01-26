@@ -3,6 +3,19 @@
 import { useGetExpensesByCategoryQuery } from "@/state/api";
 import React, { useMemo, useState } from "react";
 import Header from "../(components)/Header";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import {
+  AggregatedData,
+  AggregatedDataItem,
+  ExpenseByCategorySummary,
+} from "@/utils/interfaces/interfaces";
 
 const Expenses = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -17,6 +30,37 @@ const Expenses = () => {
   } = useGetExpensesByCategoryQuery();
 
   const expenses = useMemo(() => expensesData ?? [], [expensesData]);
+
+  const parseDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  };
+
+  const aggregateData: AggregatedDataItem[] = useMemo(() => {
+    const filtered: AggregatedData = expenses
+      .filter((data: ExpenseByCategorySummary) => {
+        const matchesCategory =
+          selectedCategory === "All" || data.category === selectedCategory;
+        const dataDate = parseDate(data.date);
+        const matchesDate =
+          !startDate ||
+          !endDate ||
+          (dataDate >= startDate && dataDate <= endDate);
+        return matchesCategory && matchesDate;
+      })
+      .reduce((acc: AggregatedData, data: ExpenseByCategorySummary) => {
+        const amount = parseInt(data.amount);
+        if (!acc[data.category]) {
+          acc[data.category] = { name: data.category, amount: 0 };
+          acc[data.category].color = `#${Math.floor(
+            Math.random() * 77
+          ).toString(77)}`;
+          acc[data.category].amount += amount;
+        }
+        return acc;
+      }, {});
+    return Object.values(filtered);
+  }, [expenses, selectedCategory, startDate, endDate]);
 
   const classNames = {
     label: "block text-sm font-medium text-gray-700",
@@ -48,6 +92,7 @@ const Expenses = () => {
             Filter by Category and Date
           </h3>
           <div className="space-y-4">
+            {/* CATEGORY */}
             <div>
               <label htmlFor="category" className={classNames.label}>
                 Category
@@ -65,7 +110,63 @@ const Expenses = () => {
                 <option value="">Salaries</option>
               </select>
             </div>
+            {/* START DATE */}
+            <div>
+              <label htmlFor="start-date" className={classNames.label}>
+                Start Date
+              </label>
+              <input
+                name="start-date"
+                id="start-date"
+                type="date"
+                className={classNames.selectedInput}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+            {/* END DATE */}
+            <div>
+              <label htmlFor="end-date" className={classNames.label}>
+                End Date
+              </label>
+              <input
+                name="end-date"
+                id="end-date"
+                type="date"
+                className={classNames.selectedInput}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </div>
           </div>
+        </div>
+        {/* PIE CHART */}
+        <div className="flex-grow bg-white shadow rounded-lg p-4 md:p-6">
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie
+                data={aggregateData}
+                cx="50%"
+                cy="50%"
+                label
+                outerRadius={150}
+                fill="#8884d8"
+                dataKey="amount"
+                onMouseEnter={(_, index) => setActiveIndex(index)}
+              >
+                {aggregateData.map(
+                  (entry: AggregatedDataItem, index: number) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        index === activeIndex ? "rgb(29, 78, 216)" : entry.color
+                      }
+                    />
+                  )
+                )}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
